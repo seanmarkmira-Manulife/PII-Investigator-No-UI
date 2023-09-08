@@ -2,8 +2,10 @@ package com.bank.squasher;
 
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.FileWriter;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStreamWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,7 +94,7 @@ public class Reports {
 	}
 
 	public void reportForInvestigateAndUpdate() {
-		try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportsPath + "\\Reports.txt", true))) {
+		try (BufferedWriter writer = new BufferedWriter(new OutputStreamWriter(new FileOutputStream(reportsPath + "//Reports.txt", true), StandardCharsets.ISO_8859_1))) {
 			int counter = 1;
 			writer.write("Log File: " + logFile + System.lineSeparator());
 			writer.write("Total Log Lines Read: " + totalLogLinesRead + System.lineSeparator());
