@@ -32,7 +32,7 @@ public class Main {
 		ArrayList<String> logDirectories = FolderUtils.findLogFiles(directoryPath);
 
 		for (String logPath : logDirectories) {
-			LogInvestigation.processLogLine(logPath, Configuration.REGEX_PATTERN, Configuration.REPLACE_WITH, true);
+			LogInvestigation.processLogLine(logPath, Configuration.REGEX_PATTERN, Configuration.REPLACE_WITH);
 		}
 
 		System.out.println("PII Investigator processing done!");

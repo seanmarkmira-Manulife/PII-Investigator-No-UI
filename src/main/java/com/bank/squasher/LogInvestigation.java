@@ -20,8 +20,7 @@ import java.util.regex.Pattern;
  */
 public class LogInvestigation {
 
-	public static void processLogLine(String originalLogPath, String regex, String replaceWith,
-			boolean investigateReplace) {
+	public static void processLogLine(String originalLogPath, String regex, String replaceWith) {
 		System.out.println("************************");
 		System.out.println("Processing " + originalLogPath);
 		final Pattern pattern = Pattern.compile(regex, Pattern.MULTILINE);
@@ -34,11 +33,8 @@ public class LogInvestigation {
 		// Checks if reports folder and text exists, if not create one
 		FolderUtils.checkReportsFolder(originalLogPath, report);
 
-		if (investigateReplace) {
-			LogInvestigation.investigateAndReplaceOperation(originalLogPath, report, pattern, replaceWith);
-		} else {
-			LogInvestigation.investigateOperation(originalLogPath, report, pattern, replaceWith);
-		}
+		LogInvestigation.investigateAndReplaceOperation(originalLogPath, report, pattern, replaceWith);
+
 		System.out.println("Finished Processing: " + originalLogPath);
 		System.out.println("************************");
 		System.out.println();
@@ -77,9 +73,7 @@ public class LogInvestigation {
 						report.addLogHitsLineNumber(report.getTotalLogLinesRead());
 						report.incNumberOfHits();
 						report.incNumberOfChanges();
-						report.addRegexHit(matchedText);
-						report.addUpdatedLogLines(updatedLine);
-						report.addLogLinesHits(line);
+						report.addRegexHit(updatedLine);
 						lineProcessed = true;
 						containsPII = true;
 					}
@@ -113,40 +107,7 @@ public class LogInvestigation {
 			}
 		}
 
-		report.reportForInvestigateAndUpdate(true);
-		System.out.println("Reports Created");
-	}
-
-	public static void investigateOperation(String originalLogPath, Reports report, Pattern pattern,
-			String replaceWith) {
-		System.out.println("Investigate Operation Started for Log");
-
-		try (BufferedReader reader = new BufferedReader(
-				new InputStreamReader(new FileInputStream(originalLogPath), StandardCharsets.ISO_8859_1))) {
-
-			String line;
-
-			while ((line = reader.readLine()) != null) {
-				report.incTotalLogLinesRead();
-
-				Matcher matcher = pattern.matcher(line);
-				if (matcher.find()) {
-					String matchedText = matcher.group();
-
-					// Five '*', means that it is already obfuscated and must not be updated or
-					// considered as a hit of unobfuscated log
-					if (!matchedText.contains("*****")) {
-						report.addLogHitsLineNumber(report.getTotalLogLinesRead());
-						report.incNumberOfHits();
-						report.addRegexHit(matchedText);
-						report.addLogLinesHits(line);
-					}
-				}
-			}
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-		report.reportForInvestigateAndUpdate(false);
+		report.reportForInvestigateAndUpdate();
 		System.out.println("Reports Created");
 	}
 }

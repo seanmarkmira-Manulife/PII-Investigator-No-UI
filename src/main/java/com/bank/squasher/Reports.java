@@ -5,6 +5,8 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
  * Reports class to create the reports for a given log operation
@@ -41,7 +43,23 @@ public class Reports {
 	}
 
 	public void addRegexHit(String logLine) {
-		regexHit.add(logLine);
+		Pattern traceIdPattern = Pattern.compile("\"TraceId\":\"(.*?)\"");
+		Pattern timestampPattern = Pattern.compile("\"Timestamp\":\"(.*?)\"");
+
+		Matcher traceIdMatcher = traceIdPattern.matcher(logLine);
+		Matcher timestampMatcher = timestampPattern.matcher(logLine);
+
+		String traceId = "not found";
+		String timestamp = "not found";
+
+		if (traceIdMatcher.find()) {
+			traceId = traceIdMatcher.group(1);
+		}
+
+		if (timestampMatcher.find()) {
+			timestamp = timestampMatcher.group(1);
+		}
+		regexHit.add("Timestamp: " + timestamp + " , " + "traceId: " + traceId);
 	}
 
 	public void addLogHitsLineNumber(Integer logLineNumber) {
@@ -73,7 +91,7 @@ public class Reports {
 		totalLogLinesRead++;
 	}
 
-	public void reportForInvestigateAndUpdate(boolean investigateAndUpdate) {
+	public void reportForInvestigateAndUpdate() {
 		try (BufferedWriter writer = new BufferedWriter(new FileWriter(reportsPath + "\\Reports.txt", true))) {
 			int counter = 1;
 			writer.write("Log File: " + logFile + System.lineSeparator());
@@ -81,9 +99,7 @@ public class Reports {
 			writer.write("Regex Used: " + regex + System.lineSeparator());
 			writer.write("Number of Hits: " + numberOfHits + System.lineSeparator());
 
-			if (investigateAndUpdate) {
-				writer.write("Number of Changes: " + numberOfChanges + System.lineSeparator());
-			}
+			writer.write("Number of Changes: " + numberOfChanges + System.lineSeparator());
 
 			writer.write("Line Numbers that Matches Regex: ");
 			for (Integer lineNumber : logHitsLineNumber) {
@@ -91,7 +107,7 @@ public class Reports {
 			}
 			writer.write(System.lineSeparator());
 
-			writer.write("Matched String in Log Against Regex -- Possible PII: ");
+			writer.write("PII Found and Obfuscated:");
 			for (String LogLine : regexHit) {
 				writer.write(System.lineSeparator());
 				writer.write(counter + ". " + LogLine);
@@ -100,24 +116,6 @@ public class Reports {
 			writer.write(System.lineSeparator());
 			writer.write(System.lineSeparator());
 
-			writer.write("Log Lines That Matches Regex: ");
-			for (String logLine : logLineHits) {
-				writer.write(System.lineSeparator());
-				writer.write(System.lineSeparator());
-				writer.write(logLine);
-			}
-			writer.write(System.lineSeparator());
-			writer.write(System.lineSeparator());
-
-			if (investigateAndUpdate) {
-				writer.write("Updated Log Lines: ");
-				for (String logLine : updatedLogLines) {
-					writer.write(System.lineSeparator());
-					writer.write(System.lineSeparator());
-					writer.write(logLine);
-				}
-				writer.write(System.lineSeparator());
-			}
 			writer.write("---------------------------------------------" + System.lineSeparator());
 		} catch (IOException e) {
 			e.printStackTrace();

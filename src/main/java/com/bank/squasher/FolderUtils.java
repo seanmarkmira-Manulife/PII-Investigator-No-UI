@@ -82,7 +82,8 @@ public class FolderUtils {
 			for (File file : files) {
 				if (file.isFile() && !file.getName().endsWith(".Z")
 						&& file.getName().contains(Configuration.LOG_TO_OPERATE)
-						&& !file.getName().equals(Configuration.LOG_TO_OPERATE + ".log")) {
+						&& !file.getName().equals(Configuration.LOG_TO_OPERATE + ".log")
+						&& !file.getName().equals(Configuration.LOG_ERROR_TO_EXCLUDE + ".log")) {
 					System.out.println("Adding to ArrayList file:" + file.getName());
 					logsToOperate.add(file.getAbsolutePath());
 				}
@@ -90,24 +91,5 @@ public class FolderUtils {
 		}
 
 		return logsToOperate;
-	}
-
-	// Note: This is not used due to requirement changes
-	public static String checkUpdatedFolder(String logPath) {
-		File[] fileArray = createFolder(logPath, "Updated");
-
-		return fileArray[0].getAbsolutePath() + "\\" + fileArray[1].getName();
-	}
-
-	// Note: This is not used due to requirement changes
-	public static String modifyFileName(String fileName) {
-		String[] nameParts = fileName.split("\\.");
-		StringBuilder newName = new StringBuilder(nameParts[0] + "_backup");
-		if (nameParts.length > 1) {
-			for (int i = 1; i < nameParts.length; i++) {
-				newName.append(".").append(nameParts[i]);
-			}
-		}
-		return newName.toString();
 	}
 }
