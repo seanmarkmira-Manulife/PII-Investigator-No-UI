@@ -98,8 +98,7 @@ public class LogInvestigation {
 			try (BufferedWriter writer = new BufferedWriter(
 					new OutputStreamWriter(new FileOutputStream(originalLogPath), StandardCharsets.ISO_8859_1))) {
 				for (String line : logLines) {
-					writer.write(line);
-					writer.newLine();
+					writer.write(line+"\n");
 				}
 
 			} catch (IOException e) {
