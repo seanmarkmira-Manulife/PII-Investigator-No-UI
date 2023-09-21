@@ -12,7 +12,7 @@ public class Configuration {
 	public static final String REPLACE_WITH = "&lt;JointOwner&gt;*****&lt;&#x2F;JointOwner&gt;";
 	public static final String REGEX_PATTERN = "&lt;JointOwner&gt;.*?&lt;&#x2F;JointOwner&gt;";
 	public static final String LOG_CLIENTWS = "MBC_ClientWSEAR";
-	public static final String LOG_ACCOUNTSERVICES = "";
-	public static final String LOG_ERROR_CLIENTWS = "";
-	public static final String LOG_ERROR_ACCOUNTSERVICES = "";
+	public static final String LOG_ERROR_CLIENTWS = "MBC_ClientWSSEAR_Errors";
+	public static final String LOG_ACCOUNTSERVICES = "Bank_AccountServicesEAR";
+	public static final String LOG_ERROR_ACCOUNTSERVICES = "Bank_AccountServicesEAR_Errors";
 }
