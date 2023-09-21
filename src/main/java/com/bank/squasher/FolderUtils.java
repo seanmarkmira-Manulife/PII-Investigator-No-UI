@@ -81,13 +81,12 @@ public class FolderUtils {
 		if (files != null) {
 			for (File file : files) {
 				if (file.isFile() 
+						&& (file.getName().contains(Configuration.LOG_CLIENTWS) || file.getName().contains(Configuration.LOG_ACCOUNTSERVICES))
 						&& !file.getName().endsWith(".Z")
 						&& !file.getName().equals(Configuration.LOG_CLIENTWS + ".log")
 						&& !file.getName().equals(Configuration.LOG_ERROR_CLIENTWS + ".log")
 						&& !file.getName().equals(Configuration.LOG_ACCOUNTSERVICES + ".log")
-						&& !file.getName().equals(Configuration.LOG_ERROR_ACCOUNTSERVICES + ".log")
-						&& file.getName().contains(Configuration.LOG_CLIENTWS)
-						|| file.getName().contains(Configuration.LOG_ACCOUNTSERVICES)) {
+						&& !file.getName().equals(Configuration.LOG_ERROR_ACCOUNTSERVICES + ".log")) {
 					System.out.println("Adding to ArrayList file:" + file.getName());
 					logsToOperate.add(file.getAbsolutePath());
 				}
